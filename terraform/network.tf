@@ -7,11 +7,11 @@ resource "aws_vpc" "glnetwork" {
 }
 
 resource "aws_subnet" "glnetwork_subnet" {
-  count             = "${var.count}" 
-  vpc_id            = "${aws_vpc.glnetwork.id}"
-   cidr_block        = "${element(var.subnet_cidr, count.index)}"
-   availability_zone = "${element(var.av_zone, count.index)}"
-
+  count                   = "${length(var.subnet_cidr)}" 
+  vpc_id                  = "${aws_vpc.glnetwork.id}"
+  cidr_block              = "${element(var.subnet_cidr, count.index)}"
+  availability_zone       = "${element(var.av_zone, count.index)}"
+  map_public_ip_on_launch = "true"
   tags = {
     Name = "${var.network_name}-${count.index +1}"
   }
@@ -26,18 +26,18 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route_table" "route_table" {
-  vpc_id = "${aws_vpc.glnetwork.id}"
+  vpc_id       = "${aws_vpc.glnetwork.id}"
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
-  tags {
+  tags = {
     Name = "route_table"
   }
 }
 
 resource "aws_route_table_association" "rt_a" {
-  count = "${length(var.subnet_cidr)}"
+  count          = "${length(var.subnet_cidr)}"
   subnet_id      = "${element(aws_subnet.glnetwork_subnet.*.id,count.index)}"
   route_table_id = "${aws_route_table.route_table.id}"
 }

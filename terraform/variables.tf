@@ -51,3 +51,7 @@ variable "subnet_cidr" {
 variable "private_ip" {
   default = ["10.0.10.100", "10.0.20.100"]
 }
+
+variable "lb_listener_protocol" {
+  default = "HTTP"
+}
