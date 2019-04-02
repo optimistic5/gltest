@@ -1,3 +1,22 @@
+# resource "aws_iam_role" "codedeploy_iam_role" {
+#     name = "codedeploy_iam_role"
+#     assume_role_policy = <<EOF
+# {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Sid": "",
+#             "Effect": "Allow",
+#             "Principal": {
+#                 "Service": "codedeploy.${var.region}.amazonaws.com"
+#             },
+#             "Action": "sts:AssumeRole"
+#         }
+#     ]
+# }
+# EOF
+# }
+
 resource "aws_iam_role" "web_iam_role" {
     name = "web_iam_role"
     assume_role_policy = <<EOF
@@ -11,6 +30,14 @@ resource "aws_iam_role" "web_iam_role" {
       },
       "Effect": "Allow",
       "Sid": ""
+    },
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codedeploy.${var.region}.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
     }
   ]
 }

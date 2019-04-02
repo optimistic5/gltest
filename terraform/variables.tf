@@ -15,7 +15,7 @@ variable "instance_type" {
 }
 
 variable "tag_name" {
-  default = "Windows Server 2016"
+  default = "Windows_Server_2016"
 }
 
 ######Network
@@ -54,4 +54,9 @@ variable "private_ip" {
 
 variable "lb_listener_protocol" {
   default = "HTTP"
+}
+
+#CodeDeploy
+variable "deployment_group_name" {
+  default = "deployment_group"
 }

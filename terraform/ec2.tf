@@ -14,7 +14,8 @@ resource "aws_instance" "winserver" {
   #user_data     = "${file("../iis.ps1")}"
   iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
   tags = {
-    Name = "${var.tag_name}-${count.index + 1}"
+    Name = "${var.tag_name}-${count.index + 1}",
+    Deploy = "yes"
   }
 }
 
