@@ -11,7 +11,7 @@ resource "aws_instance" "winserver" {
   ami           = "${lookup(var.amis, var.region)}"
   instance_type = "${var.instance_type}"
   key_name      = "bogdana-Frankfurt"  
-  #user_data     = "${file("../iis.ps1")}"
+  user_data     = "${file("../user-data.ps1")}"
   iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
   tags = {
     Name = "${var.tag_name}-${count.index + 1}",

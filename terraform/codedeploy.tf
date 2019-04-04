@@ -13,6 +13,6 @@ resource "aws_codedeploy_deployment_group" "test_app" {
 }
 
 resource "aws_codedeploy_app" "test_app" {
-  compute_platform = "ECS"
+  compute_platform = "Server"
   name             = "test_app"
 }
