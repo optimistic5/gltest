@@ -1,7 +1,7 @@
 # Compiled files
 terraform/*.tfstate
 terraform/*.tfstate.backup
-terrafrom/.terraform.tfstate.lock.info
+terraform/.terraform.tfstate.lock.info
 
 # Module directory
 terraform/.terraform/
