@@ -20,10 +20,6 @@ variable "tag_name" {
 
 ######Network
 
-variable "web_port" {
-  default = "8080"
-}
-
 variable "rdp_port" {
   default = "3389"
 }
@@ -52,11 +48,25 @@ variable "private_ip" {
   default = ["10.0.10.100", "10.0.20.100"]
 }
 
+variable "public_cidr" {
+  default = "0.0.0.0/0"
+}
+
+
+#Application
+
 variable "lb_listener_protocol" {
   default = "HTTP"
 }
 
-#CodeDeploy
-variable "deployment_group_name" {
-  default = "deployment_group"
+variable "lb_listener_port" {
+  default = "80"
+}
+
+variable "lb_target_group_port" {
+  default = "8080"
+}
+
+variable "app_name" {
+  default = "test_app"
 }

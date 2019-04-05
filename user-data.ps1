@@ -1,19 +1,26 @@
 <powershell>
-#Install CodeDeploy Agent
-Set-ExecutionPolicy RemoteSigned
-Import-Module AWSPowerShell
-$REGION = (ConvertFrom-Json (Invoke-WebRequest -Uri http://169.254.169.254/latest/dynamic/instance-identity/document -UseBasicParsing).Content).region
-New-Item -Path c:\temp -ItemType "directory" -Force 
-powershell.exe -Command Read-S3Object -BucketName aws-codedeploy-$REGION -Key latest/codedeploy-agent.msi -File c:\temp\codedeploy-agent.msi 
-New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "ServicesPipeTimeout" -Value 120000 -PropertyType DWORD -Force
-c:\temp\codedeploy-agent.msi /quiet /l c:\temp\host-agent-install-log.txt
+#Variables
+$appdir = "c:\inetpub\test_app"
+$file = "index.html"
+$site = "test_app"
+$id = "2"
+$port = "8080:"
+$bucket = "gltest-bucket"
 
-#install AWS CLI
-$storageDir = "c:\temp"
-$webclient = New-Object System.Net.WebClient
-$url = "https://s3.amazonaws.com/aws-cli/AWSCLI64PY3.msi"
-$file = "$storageDir\awscli.msi"
-$webclient.DownloadFile($url,$file)
-sleep 60
-c:\temp\awscli.msi /quiet /l c:\temp\awscli-log.txt
+#Install IIS and open port 8080 in firewall
+Install-WindowsFeature -name Web-Server -IncludeManagementTools
+netsh advfirewall firewall add rule name="Port 8080 for test_app" dir=in action=allow protocol=TCP localport=8080
+
+#Download index.html
+New-Item -Path $appdir -ItemType "directory" -Force
+#Set-ExecutionPolicy RemoteSigned
+#Import-Module AWSPowerShell
+Read-S3Object -BucketName $bucket -Key $file -File $appdir\$file
+
+#Deploy site
+C:\Windows\System32\inetsrv\appcmd.exe add site /name:$site /id:$id /physicalPath:$appdir\ /bindings:http/*:$port
+
+#Create users with administrative rights
+New-LocalUser -AccountNeverExpires:$true -Password ( ConvertTo-SecureString -AsPlainText -Force 'somepassworD123@') -Name 'Admin2' | Add-LocalGroupMember -Group administrators
+New-LocalUser -AccountNeverExpires:$true -Password ( ConvertTo-SecureString -AsPlainText -Force 'somepassworD123@') -Name 'Admin3' | Add-LocalGroupMember -Group administrators
 </powershell>

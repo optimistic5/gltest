@@ -2,30 +2,35 @@ resource "aws_security_group" "winserver" {
   name = "winserver"
   vpc_id      = "${aws_vpc.glnetwork.id}"
   description = "Winserver Security Group"
-  ingress {
-    from_port   = "${var.web_port}"
-    to_port     = "${var.web_port}"
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
   #RDP port for administrative use
-  ingress {
-    from_port   = "${var.rdp_port}"
-    to_port     = "${var.rdp_port}"
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  # ingress {
+  #   from_port   = "${var.rdp_port}"
+  #   to_port     = "${var.rdp_port}"
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["${var.public_cidr}"]
+  # }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["${var.public_cidr}"]
   }
-  #For test. DELETE IT
+}
+
+resource "aws_security_group" "lb_sg" {
+  name = "lb_sg"
+  vpc_id      = "${aws_vpc.glnetwork.id}"
+  description = "LoadBalancer Security Group"
   ingress {
-    from_port   = "80"
-    to_port     = "80"
+    from_port   = "${var.lb_listener_port}"
+    to_port     = "${var.lb_listener_port}"
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.public_cidr}"]
   }  
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["${var.public_cidr}"]
   }
 }

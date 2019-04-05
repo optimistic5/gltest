@@ -10,12 +10,11 @@ resource "aws_instance" "winserver" {
   subnet_id     = "${element(aws_subnet.glnetwork_subnet.*.id, count.index)}"
   ami           = "${lookup(var.amis, var.region)}"
   instance_type = "${var.instance_type}"
-  key_name      = "bogdana-Frankfurt"  
+  #key_name      = "bogdana-Frankfurt"  
   user_data     = "${file("../user-data.ps1")}"
   iam_instance_profile = "${aws_iam_instance_profile.web_instance_profile.id}"
   tags = {
-    Name = "${var.tag_name}-${count.index + 1}",
-    Deploy = "yes"
+    Name = "${var.tag_name}-${count.index + 1}"
   }
 }
 
