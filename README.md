@@ -1,6 +1,8 @@
 This LoadBalancer listen 80 port, not 443 (I don't have DNS name to register SSL cert on it)
 -------------------------------
 ![picture](images/schema.png)
+
+
 To deploy this environment with test application:
 
 - Clone this git

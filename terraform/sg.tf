@@ -6,7 +6,7 @@ resource "aws_security_group" "winserver" {
     from_port   = "${var.lb_target_group_port}"
     to_port     = "${var.lb_target_group_port}"
     protocol    = "tcp"
-    cidr_blocks = ["${var.public_cidr}"]
+    cidr_blocks = ["${var.vpc_cidr}"]
   }  
   #RDP port for administrative use
   ingress {
