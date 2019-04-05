@@ -2,13 +2,19 @@ resource "aws_security_group" "winserver" {
   name = "winserver"
   vpc_id      = "${aws_vpc.glnetwork.id}"
   description = "Winserver Security Group"
+  ingress {
+    from_port   = "${var.lb_target_group_port}"
+    to_port     = "${var.lb_target_group_port}"
+    protocol    = "tcp"
+    cidr_blocks = ["${var.public_cidr}"]
+  }  
   #RDP port for administrative use
-  # ingress {
-  #   from_port   = "${var.rdp_port}"
-  #   to_port     = "${var.rdp_port}"
-  #   protocol    = "tcp"
-  #   cidr_blocks = ["${var.public_cidr}"]
-  # }
+  ingress {
+    from_port   = "${var.rdp_port}"
+    to_port     = "${var.rdp_port}"
+    protocol    = "tcp"
+    cidr_blocks = ["${var.public_cidr}"]
+  }
   egress {
     from_port   = 0
     to_port     = 0
